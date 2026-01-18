@@ -1,5 +1,8 @@
-package com.example;
+package com.example.client;
 
+import com.example.controller.OrderController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +12,13 @@ import org.springframework.stereotype.Component;
  * **/
 @Component
 public class PaymentFallbackFactory implements FallbackFactory<PaymentClient> {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentFallbackFactory.class);
+
     @Override
     public PaymentClient create(Throwable cause) {
         return id -> {
-            System.out.println("Fallback reason: " + cause.getMessage());
+            log.info("Fallback reason: {} " , cause.getMessage());
             return "Payment service unavailable. Order pending.";
         };
     }

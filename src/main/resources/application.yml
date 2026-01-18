@@ -8,6 +8,11 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+
+logging:
+  pattern:
+    level: "%d{yyyy-MM-dd HH:mm:ss} [%X{CID}] %-5level %logger{36} - %msg%n"
+
 eureka:
   client:
     service-url:
