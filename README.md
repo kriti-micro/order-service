@@ -48,3 +48,11 @@ Client (stores token)
         |
         v
    Database (per service)
+```
+---
+- **Lombok** generates mutable classes and hides behavior through annotations.
+- **Records** are part of the Java language, immutable by default, and safer for concurrent systems.
+
+---
+## Exception Handler
+![ExceptionTest](docs/exception_test.png)

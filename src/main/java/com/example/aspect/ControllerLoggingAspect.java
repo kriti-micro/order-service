@@ -25,7 +25,10 @@ public class ControllerLoggingAspect {
     @Pointcut("execution(* com.example.client..*(..))")
     public void clientLayer() {}
 
-    @Before("controllerLayer() || clientLayer()")
+    @Pointcut("execution(* com.example.exception..*(..))")
+    public void exceptionLayer() {}
+
+    @Before("controllerLayer() || clientLayer() || exceptionLayer() ")
     public void logControllerMethods(JoinPoint joinPoint) {
 
         // 1️⃣ Get CID from MDC (set earlier by filter). CID var should be same as mentioned in yaml file
