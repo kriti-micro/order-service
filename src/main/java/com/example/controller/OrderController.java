@@ -2,13 +2,12 @@ package com.example.controller;
 
 import com.example.client.PaymentClient;
 import com.example.client.PaymentFallbackFactory;
+import com.example.dto.OrderResponse;
+import com.example.entity.Order;
 import com.example.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -38,6 +37,11 @@ public class OrderController {
     public String getOrderById(@PathVariable Long id) {
         String str = orderService.getOrderById(id);
         return str;
+    }
+
+    @PostMapping("/create")
+    public OrderResponse createOrder() {
+        return orderService.createOrder();
     }
 
 

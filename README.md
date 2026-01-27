@@ -56,3 +56,30 @@ Client (stores token)
 ---
 ## Exception Handler
 ![ExceptionTest](docs/exception_test.png)
+
+## Hibernate Mapping
+OneToOne OneOrder->OnePayment 
+OneToMany OneOrder->ManyItems
+
+Order - inverse side,mappedBy=<FK name>
+Payment - Owning side with FK
+Items -Owning side with FK
+
+Infinite recursion happens when Jackson serializes bidirectional JPA relationships.
+The fix is to control JSON serialization using @JsonManagedReference and @JsonBackReference, or better, return DTOs instead of entities.
+## DTO
+We never expose entities directly. We use DTOs to avoid recursion, lazy loading issues, and overfetching.
+
+![CreateOder](docs/create_order.png)
+
+### SQL queries forming:
+Hibernate: insert into orders (order_number,totalamount,id) values (?,?,default)
+Hibernate: insert into order_item (order_id,price,product_name,quantity,id) values (?,?,?,?,default)
+Hibernate: insert into order_item (order_id,price,product_name,quantity,id) values (?,?,?,?,default)
+Hibernate: select next value for order_payment_seq
+Hibernate: insert into order_payment (order_id,payment_mode,payment_status,id) values (?,?,?,?)
+
+To check on h2 DB
+http://localhost:8081/h2-console
+
+![H2 Console](docs/h2_console.png)
