@@ -3,7 +3,9 @@ package com.example.entity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity // Marks this class as DB table
@@ -24,6 +26,21 @@ public class Order {
     // ONE ORDER → MANY ITEMS
     @OneToMany(mappedBy = "order",cascade=CascadeType.ALL,orphanRemoval = true)
     private List<OrderItem> items=new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name="orders_products",
+            joinColumns = @JoinColumn(name="order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> products=new HashSet<>();
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
 
     public Long getId() {
         return id;
