@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.OrderItemResponse;
 import com.example.dto.OrderPaymentResponse;
 import com.example.dto.OrderResponse;
+import com.example.dto.ProductResponse;
 import com.example.entity.Order;
 import com.example.entity.OrderItem;
 import com.example.entity.OrderPayment;
@@ -13,6 +14,7 @@ import com.example.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,36 +44,40 @@ public class OrderService {
         OrderItem i1=new OrderItem();
         i1.setProductName("Phone");
         i1.setQuantity(1);
-        i1.setPrice(1000.0);
+        i1.setPrice(11000.0);
         i1.setOrder(order);
 
         OrderItem i2=new OrderItem();
         i2.setProductName("Charger");
-        i2.setQuantity(1);
-        i2.setPrice(1000.0);
+        i2.setQuantity(3);
+        i2.setPrice(500.0);
         i2.setOrder(order);
 
         order.setItems(List.of(i1,i2));
 
         Product p1=new Product();
-        p1.setId(11L);
-        p1.setName("Mobile");
-        p1.setPrice(1100.0);
+        p1.setName("Washing MC");
+        p1.setPrice(14000.0);
 
         Product p2=new Product();
-        p2.setId(12L);
-        p2.setName("Mobile");
-        p2.setPrice(1100.0);
+        p2.setName("Microwave");
+        p2.setPrice(9000.0);
         order.setProducts(Set.of(p1,p2));
         for(Product p: order.getProducts()){
             productRepository.save(p);
         }
 
         Order result = orderRepository.save(order);
+        //Storing result
         ArrayList<OrderItemResponse> listOfItems=new ArrayList<>();
         for(OrderItem item : result.getItems()){
             OrderItemResponse oir=new OrderItemResponse(item.getId(),item.getProductName(), item.getQuantity(), item.getPrice());
             listOfItems.add(oir);
+        }
+        Set<ProductResponse> productSet=new HashSet<>();
+        for(Product p: result.getProducts()){
+            ProductResponse pr=new ProductResponse(p.getId(),p.getName(),p.getPrice());
+            productSet.add(pr);
         }
 
         orderResponse = new OrderResponse(result.getId(), result.getOrderNumber(),
@@ -79,7 +85,7 @@ public class OrderService {
                 new OrderPaymentResponse(result.getPayment().getId(),
                         result.getPayment().getPaymentMode(),
                         result.getPayment().getPaymentStatus()),
-                 listOfItems);
+                 listOfItems,productSet);
 
 
         return orderResponse;
